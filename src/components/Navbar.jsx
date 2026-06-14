@@ -69,7 +69,7 @@ const NavBar = () => {
           {/* RIGHT — single CTA + mobile hamburger */}
           <div className="flex items-center gap-3">
             <a
-              href="#purchase"
+              href="#products"
               className="rounded-full bg-yellow-300 px-5 py-2 text-black text-sm font-bold tracking-wide transition hover:scale-105 hover:bg-yellow-200"
             >
               Purchase

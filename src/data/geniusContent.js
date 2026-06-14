@@ -37,6 +37,12 @@ export const geniusContent = {
       role: "CTO",
       image: "/img/team/Mohammed-Ali-Ahmed.jpeg",
     },
+
+    {
+      name: "Husain Mustafa Abdulla",
+      role: "xxx",
+      image: "/img/team/husain-mustafa-abdulla.jpeg",
+    },
     // Add team members here
   ],
 

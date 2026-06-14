@@ -1,5 +1,8 @@
 import AnimatedTitle from "./AnimatedTitle";
 import Button from "./Button";
+import PrintingCallout from "./PrintingCallout";
+
+<PrintingCallout />;
 
 const ImageClipBox = ({ src, clipClass }) => (
   <div className={clipClass}>

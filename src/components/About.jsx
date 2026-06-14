@@ -48,10 +48,10 @@ const About = () => {
         </div>
       </div>
 
-      <div className="h-dvh w-screen" id="clip">
-        <div className="mask-clip-path about-image">
+      <div className="h-dvh w-screen" id="clip" style={{ zIndex: 1 }}>
+        <div className="mask-clip-path about-image" style={{ zIndex: 1 }}>
           <img
-            src="img/FullTeam.jpeg"
+            src="img/GPS.jpeg"
             alt="Background"
             className="absolute left-0 top-0 size-full object-cover"
           />

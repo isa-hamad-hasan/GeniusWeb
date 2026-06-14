@@ -1,16 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedTitle from "./AnimatedTitle";
+import { supabase } from "../lib/supabase";
 
-// Helper: turn a name into a safe filename
-const slugify = (text) =>
-  text
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/\s+/g, "-");
-
-// Helper: get initials
 const getInitials = (name) =>
   name
     .split(" ")
@@ -19,71 +11,21 @@ const getInitials = (name) =>
     .map((w) => w[0].toUpperCase())
     .join("");
 
-// Team members array with descriptions
-const teamMembers = [
-  {
-    name: "Ali Hussain Khamis",
-    title: "CEO",
-    description:
-      "Ali leads the GENIUS team with a vision for innovative, sustainable technology.",
-  },
-  {
-    name: "Mohammed Ali Ahmed",
-    title: "CTO",
-    description:
-      "Mohammed drives the technical roadmap and ensures our systems are cutting-edge.",
-  },
-  {
-    name: "Rashed Aldossary",
-    title: "",
-    description:
-      "Rashed contributes to product strategy and development initiatives.",
-  },
-  {
-    name: "Talia Haitham AlRahma",
-    title: "CMO",
-    description: "Talia manages our marketing strategy and brand presence.",
-  },
-  {
-    name: "Abdulla Saeed Ali",
-    title: "CSO",
-    description: "Abdulla oversees security and system operations.",
-  },
-  {
-    name: "Mariam Yaser Alkooheji",
-    title: "CHRO",
-    description: "Mariam focuses on human resources and team growth.",
-  },
-  {
-    name: "Fatema Alzaki",
-    title: "CPO",
-    description:
-      "Fatema ensures our products meet customer needs and high standards.",
-  },
-  {
-    name: "Isa Hamad Hasan",
-    title: "CIO",
-    description: "Isa manages information systems and technology innovation.",
-  },
-  {
-    name: "Saud Badee Bubshait",
-    title: "Head of Information Systems",
-    description: "Saud coordinates IT infrastructure and data systems.",
-  },
-
-  {
-    name: "Osama Ebrahim",
-    title: "PM",
-    description:
-      "Osama specializes in project management, ensuring seamless coordination and effective communication within teams.",
-  },
-].map((m) => ({
-  ...m,
-  image: `/img/team/${slugify(m.name)}.jpeg`,
-}));
-
 const Team = () => {
-  const [selectedMember, setSelectedMember] = useState(null);
+  const [members, setMembers] = useState([]);
+  const [selectedMember, setSelected] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    supabase
+      .from("team")
+      .select("*")
+      .order("display_order")
+      .then(({ data }) => {
+        setMembers(data || []);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <section id="team" className="w-screen bg-black py-24 text-blue-50">
@@ -94,80 +36,116 @@ const Team = () => {
         />
 
         <p className="mt-4 max-w-2xl font-circular-web text-base text-blue-50/60">
-          We’re building practical, sustainable technology. Avalanche is our
+          We're building practical, sustainable technology. Avalanche is our
           first product — and the start of a growing GENIUS ecosystem.
         </p>
 
-        {/* Grid view */}
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {teamMembers.map((m, i) => (
-            <div
-              key={i}
-              className="border-hsla rounded-lg bg-black/40 p-5 backdrop-blur cursor-pointer transition-transform duration-300 hover:scale-105"
-              onClick={() => setSelectedMember(m)}
-            >
-              <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-white/5">
-                <div className="flex h-full w-full items-center justify-center">
-                  <span className="font-general text-xl text-blue-50/70">
-                    {getInitials(m.name)}
-                  </span>
+        {loading ? (
+          <div className="mt-12 flex justify-center">
+            <div className="w-6 h-6 border-2 border-yellow-300 border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : (
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {members.map((m) => (
+              <div
+                key={m.id}
+                onClick={() => setSelected(m)}
+                className="rounded-2xl bg-neutral-900 border border-neutral-800 overflow-hidden cursor-pointer transition-transform duration-300 hover:-translate-y-1 hover:border-neutral-700"
+              >
+                {/* Image area — fixed height, no aspect-square to avoid compositing issues */}
+                <div className="relative h-64 w-full bg-neutral-800">
+                  {m.image_url ? (
+                    <img
+                      src={m.image_url}
+                      alt={m.name}
+                      className="h-full w-full object-cover object-center"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center">
+                      <span className="text-3xl font-bold text-neutral-600">
+                        {getInitials(m.name)}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
-                <img
-                  src={m.image}
-                  alt={m.name}
-                  className="absolute inset-0 h-full w-full object-cover object-center"
-                  loading="lazy"
-                  onError={(e) => (e.currentTarget.style.display = "none")}
-                />
+                {/* Info */}
+                <div className="p-5">
+                  <h3 className="font-semibold text-white text-sm uppercase tracking-wide">
+                    {m.name}
+                  </h3>
+                  <p className="mt-1 text-sm text-blue-50/50">
+                    {m.title?.trim() || "Title TBD"}
+                  </p>
+                </div>
               </div>
+            ))}
+          </div>
+        )}
 
-              <h3 className="mt-4 font-general text-sm uppercase">{m.name}</h3>
-              <p className="mt-1 text-sm text-blue-50/60">
-                {m.title?.trim() || "Title TBD"}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {/* Expanded Detail View */}
+        {/* Member detail modal */}
         <AnimatePresence>
           {selectedMember && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6 backdrop-blur"
+              onClick={() => setSelected(null)}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6"
             >
               <motion.div
-                initial={{ x: "-100%", opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: "100%", opacity: 0 }}
-                transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                className="relative flex w-full max-w-4xl flex-col md:flex-row items-center gap-6 bg-black/70 p-6 rounded-lg"
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 30, opacity: 0 }}
+                transition={{ type: "spring", stiffness: 120, damping: 20 }}
+                onClick={(e) => e.stopPropagation()}
+                className="relative flex w-full max-w-3xl flex-col md:flex-row overflow-hidden rounded-3xl border border-neutral-800 bg-neutral-950"
               >
                 {/* Image */}
-                <img
-                  src={selectedMember.image}
-                  alt={selectedMember.name}
-                  className="h-64 w-full md:w-1/2 rounded-lg object-cover object-center"
-                />
+                <div className="h-64 md:h-auto md:w-2/5 shrink-0 bg-neutral-800">
+                  {selectedMember.image_url ? (
+                    <img
+                      src={selectedMember.image_url}
+                      alt={selectedMember.name}
+                      className="h-full w-full object-cover object-center"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-neutral-600">
+                      {getInitials(selectedMember.name)}
+                    </div>
+                  )}
+                </div>
 
-                {/* Description */}
-                <div className="md:w-1/2 text-blue-50/90">
-                  <h2 className="text-2xl font-bold">{selectedMember.name}</h2>
+                {/* Info */}
+                <div className="flex flex-col justify-center p-8 md:p-10">
+                  {/* Close */}
+                  <button
+                    onClick={() => setSelected(null)}
+                    className="absolute right-4 top-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition text-sm"
+                  >
+                    ✕
+                  </button>
+
+                  <p className="text-xs uppercase tracking-[0.4em] text-yellow-300 mb-3">
+                    GENIUS Team
+                  </p>
+                  <h2 className="text-2xl font-bold text-white">
+                    {selectedMember.name}
+                  </h2>
                   {selectedMember.title && (
-                    <p className="mt-1 text-sm text-blue-50/60">
+                    <p className="mt-1 text-sm text-blue-50/50">
                       {selectedMember.title}
                     </p>
                   )}
-                  <p className="mt-4">{selectedMember.description}</p>
-
+                  <p className="mt-5 text-sm leading-relaxed text-gray-400">
+                    {selectedMember.description}
+                  </p>
                   <button
-                    className="mt-6 rounded bg-yellow-400 px-4 py-2 font-bold text-black hover:bg-yellow-300"
-                    onClick={() => setSelectedMember(null)}
+                    className="mt-8 w-fit rounded-full bg-yellow-300 px-6 py-2.5 text-sm font-bold text-black hover:bg-yellow-200 transition"
+                    onClick={() => setSelected(null)}
                   >
-                    Back
+                    Close
                   </button>
                 </div>
               </motion.div>

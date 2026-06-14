@@ -11,7 +11,7 @@ const socialLinks = [
 
 const Footer = () => {
   return (
-    <footer className="w-screen bg-[var(--genius-gold)] text-black pb-10">
+    <footer className="w-full bg-[var(--genius-gold)] text-black pb-10">
       <div className="container mx-auto px-4">
         <div className="border-t border-black/15 pt-6" />
 
@@ -20,14 +20,14 @@ const Footer = () => {
             © {geniusContent.brand.name} 2025. All rights reserved.
           </p>
 
-          <div className="flex items-center justify-center gap-5">
+          <div className="flex items-center justify-center gap-7 text-2xl">
             {socialLinks.map((link, index) => (
               <a
                 key={index}
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-black/70 transition hover:text-black hover:scale-110"
+                className="flex h-10 w-10 items-center justify-center rounded-full text-black/70 transition-all duration-300 hover:bg-black/10 hover:text-black hover:scale-110"
               >
                 {link.icon}
               </a>
