@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: genius-web
+    name: geniusweb
     runtime: static
     buildCommand: npm run build
     staticPublishPath: ./dist
