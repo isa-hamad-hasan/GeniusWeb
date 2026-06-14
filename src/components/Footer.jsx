@@ -1,17 +1,15 @@
-// Footer.jsx
 import { geniusContent } from "../data/geniusContent";
-import { FaInstagram, FaLinkedin, FaTiktok } from "react-icons/fa";
+import { FaInstagram, FaLinkedin, FaTiktok, FaLock } from "react-icons/fa";
 
 const socialLinks = [
   { href: geniusContent.links.instagram, icon: <FaInstagram /> },
   { href: geniusContent.links.linkedin, icon: <FaLinkedin /> },
-  //{ href: geniusContent.links.youtube, icon: <FaYoutube /> },
   { href: geniusContent.links.tiktok, icon: <FaTiktok /> },
 ];
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-[var(--genius-gold)] text-black pb-10">
+    <footer className="w-screen bg-[var(--genius-gold)] text-black pb-10">
       <div className="container mx-auto px-4">
         <div className="border-t border-black/15 pt-6" />
 
@@ -20,14 +18,14 @@ const Footer = () => {
             © {geniusContent.brand.name} 2025. All rights reserved.
           </p>
 
-          <div className="flex items-center justify-center gap-7 text-2xl">
+          <div className="flex items-center justify-center gap-5">
             {socialLinks.map((link, index) => (
               <a
                 key={index}
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-full text-black/70 transition-all duration-300 hover:bg-black/10 hover:text-black hover:scale-110"
+                className="text-black/70 transition hover:text-black hover:scale-110"
               >
                 {link.icon}
               </a>
@@ -39,6 +37,17 @@ const Footer = () => {
             className="text-center text-sm font-light md:text-right text-black/70 hover:text-black hover:underline"
           >
             Privacy Policy
+          </a>
+        </div>
+
+        {/* Hidden admin button — small lock icon bottom right */}
+        <div className="mt-4 flex justify-end">
+          <a
+            href="/admin"
+            title=""
+            className="text-black/20 hover:text-black/50 transition-colors duration-300"
+          >
+            <FaLock size={11} />
           </a>
         </div>
       </div>
