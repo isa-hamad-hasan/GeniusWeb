@@ -132,14 +132,12 @@ const FloatingImage = () => {
               Back
             </button>
             <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow-2xl">
-              <video
-                autoPlay
-                controls
-                playsInline
-                className="w-full h-full object-contain bg-black"
-              >
-                <source src={videoUrl} type="video/mp4" />
-              </video>
+              <iframe
+                src="https://drive.google.com/file/d/1FcAV8NmivKyytLu5YfwWDInpvI3mgF2K/preview"
+                className="w-full h-full"
+                allow="autoplay"
+                allowFullScreen
+              />
             </div>
           </div>
         </div>
