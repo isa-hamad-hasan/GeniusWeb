@@ -52,6 +52,6 @@ export const geniusContent = {
     tiktok:
       "https://www.tiktok.com/@genius_co_313?is_from_webapp=1&sender_device=pc",
     youtube: "https://youtube.com/yourchannel",
-    email: "hello@genius.com",
+    email: "genius.co.313@gmail.com",
   },
 };
