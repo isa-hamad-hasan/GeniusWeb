@@ -144,7 +144,13 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center px-6">
+    <div className="relative min-h-screen bg-black flex items-center justify-center px-6">
+      <a
+        href="/"
+        className="absolute top-8 left-8 text-gray-500 hover:text-yellow-300 transition text-sm"
+      >
+        ← Back to Website
+      </a>
       <div className="w-full max-w-sm">
         <div className="mb-10 text-center">
           <p className="text-xs uppercase tracking-[0.4em] text-yellow-300 mb-2">
